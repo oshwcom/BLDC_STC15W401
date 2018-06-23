@@ -1,0 +1,3 @@
+".\list\main-V20.obj" 
+TO ".\list\BLDCM" 
+PRINT(".\list\BLDCM.m51") RAMSIZE(256) 

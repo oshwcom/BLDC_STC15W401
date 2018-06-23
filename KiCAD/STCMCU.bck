@@ -1,0 +1,81 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP L78L05_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 5V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.st.com/content/ccc/resource/technical/document/datasheet/15/55/e5/aa/23/5b/43/fd/CD00000446.pdf/files/CD00000446.pdf/jcr:content/translations/en.CD00000446.pdf
+$ENDCMP
+#
+$CMP L78L06_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 6V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.st.com/content/ccc/resource/technical/document/datasheet/15/55/e5/aa/23/5b/43/fd/CD00000446.pdf/files/CD00000446.pdf/jcr:content/translations/en.CD00000446.pdf
+$ENDCMP
+#
+$CMP L78L08_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 8V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.st.com/content/ccc/resource/technical/document/datasheet/15/55/e5/aa/23/5b/43/fd/CD00000446.pdf/files/CD00000446.pdf/jcr:content/translations/en.CD00000446.pdf
+$ENDCMP
+#
+$CMP L78L09_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 9V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.st.com/content/ccc/resource/technical/document/datasheet/15/55/e5/aa/23/5b/43/fd/CD00000446.pdf/files/CD00000446.pdf/jcr:content/translations/en.CD00000446.pdf
+$ENDCMP
+#
+$CMP L78L10_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 10V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.st.com/content/ccc/resource/technical/document/datasheet/15/55/e5/aa/23/5b/43/fd/CD00000446.pdf/files/CD00000446.pdf/jcr:content/translations/en.CD00000446.pdf
+$ENDCMP
+#
+$CMP L78L12_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 12V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.st.com/content/ccc/resource/technical/document/datasheet/15/55/e5/aa/23/5b/43/fd/CD00000446.pdf/files/CD00000446.pdf/jcr:content/translations/en.CD00000446.pdf
+$ENDCMP
+#
+$CMP L78L15_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 15V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.st.com/content/ccc/resource/technical/document/datasheet/15/55/e5/aa/23/5b/43/fd/CD00000446.pdf/files/CD00000446.pdf/jcr:content/translations/en.CD00000446.pdf
+$ENDCMP
+#
+$CMP L78L18_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 18V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.st.com/content/ccc/resource/technical/document/datasheet/15/55/e5/aa/23/5b/43/fd/CD00000446.pdf/files/CD00000446.pdf/jcr:content/translations/en.CD00000446.pdf
+$ENDCMP
+#
+$CMP L78L24_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 24V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.st.com/content/ccc/resource/technical/document/datasheet/15/55/e5/aa/23/5b/43/fd/CD00000446.pdf/files/CD00000446.pdf/jcr:content/translations/en.CD00000446.pdf
+$ENDCMP
+#
+$CMP L78L33_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 3.3V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.st.com/content/ccc/resource/technical/document/datasheet/15/55/e5/aa/23/5b/43/fd/CD00000446.pdf/files/CD00000446.pdf/jcr:content/translations/en.CD00000446.pdf
+$ENDCMP
+#
+$CMP MC78L05_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 5V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.fairchildsemi.com/ds/LM/LM78L05A.pdf
+$ENDCMP
+#
+$CMP MC78L08_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 8V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.fairchildsemi.com/ds/LM/LM78L05A.pdf
+$ENDCMP
+#
+$CMP MC78L12_SOT89
+D Positive 100mA 30V Linear Regulator, Fixed Output 12V, SOT-89
+K Voltage Regulator 100mA Positive
+F http://www.fairchildsemi.com/ds/LM/LM78L05A.pdf
+$ENDCMP
+#
+#End Doc Library
