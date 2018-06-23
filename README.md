@@ -18,7 +18,7 @@ README
 
 ### 目标
 完成一款低成本（人民币7元以下）的BLDC驱动电路。
-
+![](https://github.com/oshwcom/BLDC_STC15W401/blob/master/KiCAD/BLDC_STC15W401AS.png "一款低成本BLDC驱动模块")
 ------
 
 ### 功能
