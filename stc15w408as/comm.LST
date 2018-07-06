@@ -1,0 +1,203 @@
+C51 COMPILER V9.01   COMM                                                                  07/05/2018 13:08:46 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE COMM
+OBJECT MODULE PLACED IN comm.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE comm.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*---------------------------------------------------------------------*/
+   2          /* --- STC MCU Limited ------------------------------------------------*/
+   3          /* --- STC15F4K60S4 系列 定时器2用作串口1的波特率发生器举例------------*/
+   4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+   5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+   6          /* --- Tel: 86-0513-55012928,55012929,55012966-------------------------*/
+   7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+   8          /* --- Web: www.GXWMCU.com --------------------------------------------*/
+   9          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序        */
+  10          /* 如果要在文章中应用此代码,请在文章中注明使用了STC的资料及程序        */
+  11          /*---------------------------------------------------------------------*/
+  12          
+  13          //本示例在Keil开发环境下请选择Intel的8058芯片型号进行编译
+  14          //若无特别说明,工作频率一般为11.0592MHz
+  15          
+  16          
+  17          #include "reg51.h"
+  18          #include "intrins.h"
+  19          
+  20          typedef unsigned char BYTE;
+  21          typedef unsigned int WORD;
+  22          
+  23          #define FOSC 11059200L          //系统频率
+  24          #define BAUD 115200             //串口波特率
+  25          
+  26          #define NONE_PARITY     0       //无校验
+  27          #define ODD_PARITY      1       //奇校验
+  28          #define EVEN_PARITY     2       //偶校验
+  29          #define MARK_PARITY     3       //标记校验
+  30          #define SPACE_PARITY    4       //空白校验
+  31          
+  32          #define PARITYBIT EVEN_PARITY   //定义校验位
+  33          
+  34          sfr P0M1 = 0x93;
+  35          sfr P0M0 = 0x94;
+  36          sfr P1M1 = 0x91;
+  37          sfr P1M0 = 0x92;
+  38          sfr P2M1 = 0x95;
+  39          sfr P2M0 = 0x96;
+  40          sfr P3M1 = 0xb1;
+  41          sfr P3M0 = 0xb2;
+  42          sfr P4M1 = 0xb3;
+  43          sfr P4M0 = 0xb4;
+  44          sfr P5M1 = 0xC9;
+  45          sfr P5M0 = 0xCA;
+  46          sfr P6M1 = 0xCB;
+  47          sfr P6M0 = 0xCC;
+  48          sfr P7M1 = 0xE1;
+  49          sfr P7M0 = 0xE2;
+  50          
+  51          sfr AUXR  = 0x8e;               //辅助寄存器
+  52          sfr T2H   = 0xd6;               //定时器2高8位
+  53          sfr T2L   = 0xd7;               //定时器2低8位
+  54          
+  55          sfr P_SW1   = 0xA2;             //外设功能切换寄存器1
+C51 COMPILER V9.01   COMM                                                                  07/05/2018 13:08:46 PAGE 2   
+
+  56          
+  57          #define S1_S0 0x40              //P_SW1.6
+  58          #define S1_S1 0x80              //P_SW1.7
+  59          
+  60          sbit P22 = P2^2;
+  61          
+  62          bit busy;
+  63          
+  64          void SendData(BYTE dat);
+  65          void SendString(char *s);
+  66          
+  67          void main()
+  68          {
+  69   1          P0M0 = 0x00;
+  70   1          P0M1 = 0x00;
+  71   1          P1M0 = 0x00;
+  72   1          P1M1 = 0x00;
+  73   1          P2M0 = 0x00;
+  74   1          P2M1 = 0x00;
+  75   1          P3M0 = 0x00;
+  76   1          P3M1 = 0x00;
+  77   1          P4M0 = 0x00;
+  78   1          P4M1 = 0x00;
+  79   1          P5M0 = 0x00;
+  80   1          P5M1 = 0x00;
+  81   1          P6M0 = 0x00;
+  82   1          P6M1 = 0x00;
+  83   1          P7M0 = 0x00;
+  84   1          P7M1 = 0x00;
+  85   1      
+  86   1          ACC = P_SW1;
+  87   1          ACC &= ~(S1_S0 | S1_S1);    //S1_S0=0 S1_S1=0
+  88   1          P_SW1 = ACC;                //(P3.0/RxD, P3.1/TxD)
+  89   1          
+  90   1          //  ACC = P_SW1;
+  91   1          //  ACC &= ~(S1_S0 | S1_S1);    //S1_S0=1 S1_S1=0
+  92   1          //  ACC |= S1_S0;               //(P3.6/RxD_2, P3.7/TxD_2)
+  93   1          //  P_SW1 = ACC;  
+  94   1          //  
+  95   1          //  ACC = P_SW1;
+  96   1          //  ACC &= ~(S1_S0 | S1_S1);    //S1_S0=0 S1_S1=1
+  97   1          //  ACC |= S1_S1;               //(P1.6/RxD_3, P1.7/TxD_3)
+  98   1          //  P_SW1 = ACC;  
+  99   1      
+ 100   1          #if (PARITYBIT == NONE_PARITY)
+                      SCON = 0x50;                //8位可变波特率
+                  #elif (PARITYBIT == ODD_PARITY) || (PARITYBIT == EVEN_PARITY) || (PARITYBIT == MARK_PARITY)
+ 103   1              SCON = 0xda;                //9位可变波特率,校验位初始为1
+ 104   1          #elif (PARITYBIT == SPACE_PARITY)
+                      SCON = 0xd2;                //9位可变波特率,校验位初始为0
+                  #endif
+ 107   1      
+ 108   1          T2L = (65536 - (FOSC/4/BAUD));   //设置波特率重装值
+ 109   1          T2H = (65536 - (FOSC/4/BAUD))>>8;
+ 110   1          AUXR = 0x14;                //T2为1T模式, 并启动定时器2
+ 111   1          AUXR |= 0x01;               //选择定时器2为串口1的波特率发生器
+ 112   1          ES = 1;                     //使能串口1中断
+ 113   1          EA = 1;
+ 114   1      
+ 115   1          SendString("STC15F2K60S2\r\nUart Test !\r\n");
+ 116   1          while(1);
+ 117   1      }
+C51 COMPILER V9.01   COMM                                                                  07/05/2018 13:08:46 PAGE 3   
+
+ 118          
+ 119          /*----------------------------
+ 120          UART 中断服务程序
+ 121          -----------------------------*/
+ 122          void Uart() interrupt 4 using 1
+ 123          {
+ 124   1          if (RI)
+ 125   1          {
+ 126   2              RI = 0;                 //清除RI位
+ 127   2              P0 = SBUF;              //P0显示串口数据
+ 128   2              P22 = RB8;              //P2.2显示校验位
+ 129   2          }
+ 130   1          if (TI)
+ 131   1          {
+ 132   2              TI = 0;                 //清除TI位
+ 133   2              busy = 0;               //清忙标志
+ 134   2          }
+ 135   1      }
+ 136          
+ 137          /*----------------------------
+ 138          发送串口数据
+ 139          ----------------------------*/
+ 140          void SendData(BYTE dat)
+ 141          {
+ 142   1          while (busy);               //等待前面的数据发送完成
+ 143   1          ACC = dat;                  //获取校验位P (PSW.0)
+ 144   1          if (P)                      //根据P来设置校验位
+ 145   1          {
+ 146   2      #if (PARITYBIT == ODD_PARITY)
+                      TB8 = 0;                //设置校验位为0
+              #elif (PARITYBIT == EVEN_PARITY)
+ 149   2              TB8 = 1;                //设置校验位为1
+ 150   2      #endif
+ 151   2          }
+ 152   1          else
+ 153   1          {
+ 154   2      #if (PARITYBIT == ODD_PARITY)
+                      TB8 = 1;                //设置校验位为1
+              #elif (PARITYBIT == EVEN_PARITY)
+ 157   2              TB8 = 0;                //设置校验位为0
+ 158   2      #endif
+ 159   2          }
+ 160   1          busy = 1;
+ 161   1          SBUF = ACC;                 //写数据到UART数据寄存器
+ 162   1      }
+ 163          
+ 164          /*----------------------------
+ 165          发送字符串
+ 166          ----------------------------*/
+ 167          void SendString(char *s)
+ 168          {
+ 169   1          while (*s)                  //检测字符串结束标志
+ 170   1          {
+ 171   2              SendData(*s++);         //发送当前字符
+ 172   2          }
+ 173   1      }
+ 174          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    148    ----
+   CONSTANT SIZE    =     28    ----
+C51 COMPILER V9.01   COMM                                                                  07/05/2018 13:08:46 PAGE 4   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
