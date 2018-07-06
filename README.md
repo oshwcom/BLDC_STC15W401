@@ -34,6 +34,6 @@ BLDC_STC15W401AS
 ### 原理图
     V0.2版原理图。  修订了MOSFET的型号，多加了一种替代封装（SOT23和TO252)。
 
-![](https://github.com/oshwcom/BLDC_STC15W401/blob/master/stc15w408as/BLDC_STC15W401.pdf "V0.2版原理图")
+![](https://github.com/oshwcom/BLDC_STC15W401/blob/master/stc15w408as/BLDC_STC15W401.svg "V0.2版原理图")
 
 ------
